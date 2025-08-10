@@ -1,0 +1,19 @@
+[project]
+name = "llm-tools"
+version = "0.1.0"
+description = "Transformers for LLMs"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "huggingface_hub",
+    "torch",
+    "ipykernel",
+    "jupyter",
+    "ipywidgets",
+    "transformers[torch]",
+    "datasets",
+    "evaluate",
+    "accelerate",
+    "timm",
+    "python-dotenv",
+]
