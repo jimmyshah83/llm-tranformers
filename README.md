@@ -1,6 +1,6 @@
-# LLM Transformers Project
+# LLM Transformers Project - Medical Text Generation
 
-This project demonstrates how to use Microsoft's Phi-4-mini-instruct model with the Hugging Face Transformers library.
+This project demonstrates how to use Microsoft's Phi-4-mini-instruct model with the Hugging Face Transformers library for medical text generation tasks, specifically using Alzheimer's disease research abstracts.
 
 ## Setup
 
@@ -34,16 +34,25 @@ jupyter notebook phi4-transformers.ipynb
 
 - **Raw Transformers API**: Direct model and tokenizer usage
 - **Pipeline**: Simplified text generation pipeline
-- **Training**: Complete training loop with datasets
+- **Training**: Complete training loop with medical datasets
 - **Model Sharing**: Push trained models to Hugging Face Hub
 
 ## Models Used
 
 - Microsoft Phi-4-mini-instruct for text generation
-- Rotten Tomatoes dataset for training examples
+- Gaborandi/Alzheimer_pubmed_abstracts dataset for medical text training
+
+## Dataset Information
+
+The project uses the **Gaborandi/Alzheimer_pubmed_abstracts** dataset, which contains:
+- PubMed abstracts related to Alzheimer's disease research
+- High-quality, peer-reviewed medical literature
+- Structured format suitable for text generation training
+- Medical domain expertise for specialized applications
 
 ## Notes
 
 - The notebook will automatically authenticate using your token from the environment file
 - No more manual token pasting during execution
 - Make sure to keep your token secure and never commit it to version control
+- Medical datasets require careful handling and validation of generated content
