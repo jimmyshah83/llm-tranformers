@@ -10,10 +10,24 @@ dependencies = [
     "ipykernel",
     "jupyter",
     "ipywidgets",
-    "transformers[torch]",
+    "transformers",
     "datasets",
     "evaluate",
     "accelerate",
     "timm",
     "python-dotenv",
+    "tensorboard",
+    "trl",
+    "peft",
 ]
+
+[project.optional-dependencies]
+# NVIDIA CUDA-focused extras for multi-GPU training
+cuda = [
+    "deepspeed; platform_system == 'Linux' and platform_machine == 'x86_64'",
+    "bitsandbytes; platform_system == 'Linux' and platform_machine == 'x86_64'",
+    "flash-attn; platform_system == 'Linux' and platform_machine == 'x86_64'",
+]
+
+# Apple Silicon / Metal (MPS) has no extra deps here; use PyTorch MPS backend
+metal = []
