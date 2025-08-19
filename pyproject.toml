@@ -31,3 +31,6 @@ cuda = [
 
 # Apple Silicon / Metal (MPS) has no extra deps here; use PyTorch MPS backend
 metal = []
+
+[tool.uv.extra-build-dependencies]
+flash-attn = ["torch"]
