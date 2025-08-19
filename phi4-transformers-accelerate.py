@@ -14,7 +14,7 @@ from peft import LoraConfig
 from trl import SFTTrainer
 from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments
 
-load_dotenv()
+load_dotenv(override=True)
 
 # Initialize logger
 logging.basicConfig(
@@ -36,37 +36,28 @@ tokenizer.pad_token = tokenizer.unk_token
 tokenizer.pad_token_id = tokenizer.convert_tokens_to_ids(tokenizer.pad_token)
 tokenizer.padding_side = 'right'
 
-def apply_chat_template(data, tk):
-	"""
-	Apply chat template to the dataset.
-	"""
-	messages = [
-		{"role": "user", "content": data["problem"]},
-		{"role": "assistant", "content": data["expected_answer"]},
-	]
-	data["text"] = tk.apply_chat_template(
-		messages, tokenize=False, add_generation_prompt=False
-	)
-	return data
+def apply_chat_template(
+    example,
+    tokenizer,
+):
+    messages = example["messages"]
+    example["text"] = tokenizer.apply_chat_template(
+        messages, tokenize=False, add_generation_prompt=False)
+    return example
 
-train_data, test_data = load_dataset(
-	"nvidia/OpenMathInstruct-2", split=["train_2M", "train_1M"]
-	)
+train_dataset, test_dataset = load_dataset("HuggingFaceH4/ultrachat_200k", split=["train_sft", "test_sft"])
 
-
-processed_train_dataset = train_data.map(
-	apply_chat_template, fn_kwargs={"tk": tokenizer}, 
-	remove_columns=train_data.column_names, num_proc=10
+processed_train_dataset = train_dataset.map(
+	apply_chat_template, fn_kwargs={"tokenizer": tokenizer}, 
+	remove_columns=train_dataset.column_names, num_proc=10
 )
 logger.info("Processed train dataset: %s samples", len(processed_train_dataset))
-print(processed_train_dataset[0])
 
-processed_test_dataset = test_data.map(
-	apply_chat_template, fn_kwargs={"tk": tokenizer}, 
-	remove_columns=test_data.column_names, num_proc=10
+processed_test_dataset = test_dataset.map(
+	apply_chat_template, fn_kwargs={"tokenizer": tokenizer}, 
+	remove_columns=test_dataset.column_names, num_proc=10
 )
 logger.info("Processed test dataset: %s samples", len(processed_test_dataset))
-
 
 training_config = {
     "bf16": True,
@@ -81,13 +72,13 @@ training_config = {
     "output_dir": "./checkpoint_dir",
     "overwrite_output_dir": True,
     "per_device_eval_batch_size": 4,
-    "per_device_train_batch_size": 4,
+    "per_device_train_batch_size": 1,
     "remove_unused_columns": True,
     "save_steps": 100,
     "save_total_limit": 1,
     "seed": 0,
     "gradient_checkpointing": True,
-    "gradient_checkpointing_kwargs":{"use_reentrant": False},
+    "gradient_checkpointing_kwargs":{"use_reentrant": True},
     "gradient_accumulation_steps": 1,
     "warmup_ratio": 0.2,
     }
@@ -131,7 +122,7 @@ logger.warning(
 logger.info("Training/evaluation parameters %s", train_conf)
 logger.info("PEFT parameters %s", peft_conf)
 
-model = AutoModelForCausalLM.from_pretrained("microsoft/Phi-4-mini-instruct", attn_implementation="flash_attention_2")
+model = AutoModelForCausalLM.from_pretrained("microsoft/Phi-4-mini-instruct", attn_implementation="flash_attention_2", use_cache=False)
 
 # Training
 trainer = SFTTrainer(
@@ -139,11 +130,7 @@ trainer = SFTTrainer(
     args=train_conf,
     peft_config=peft_conf,
     train_dataset=processed_train_dataset,
-    eval_dataset=processed_test_dataset,
-    max_seq_length=2048,
-    dataset_text_field="text",
-    tokenizer=tokenizer,
-    packing=True
+    eval_dataset=processed_test_dataset
 )
 
 train_result = trainer.train()
