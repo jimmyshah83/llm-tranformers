@@ -12,7 +12,7 @@ from datasets import load_dataset
 import transformers
 from peft import LoraConfig
 from trl import SFTTrainer
-from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments,
+from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments
 
 load_dotenv()
 

@@ -56,3 +56,37 @@ The project uses the **Gaborandi/Alzheimer_pubmed_abstracts** dataset, which con
 - No more manual token pasting during execution
 - Make sure to keep your token secure and never commit it to version control
 - Medical datasets require careful handling and validation of generated content
+
+## Environment (for issues)
+
+Copy-and-paste the text below in your GitHub issue:
+
+```text
+- `Accelerate` version: 1.10.0
+- Platform: Linux-6.8.0-1030-azure-x86_64-with-glibc2.35
+- `accelerate` bash location: /mnt/batch/tasks/shared/LS_root/mounts/clusters/ucs-nc40-h100/code/phi4-ft/.venv/bin/accelerate
+- Python version: 3.13.7
+- Numpy version: 2.3.2
+- PyTorch version: 2.8.0+cu128
+- PyTorch accelerator: CUDA
+- System RAM: 314.69 GB
+- GPU type: NVIDIA H100 NVL
+- `Accelerate` default config:
+	- compute_environment: LOCAL_MACHINE
+	- distributed_type: DEEPSPEED
+	- mixed_precision: bf16
+	- use_cpu: False
+	- debug: False
+	- num_processes: 1
+	- machine_rank: 0
+	- num_machines: 1
+	- rdzv_backend: static
+	- same_network: True
+	- main_training_function: main
+	- enable_cpu_affinity: False
+	- deepspeed_config: {'gradient_accumulation_steps': 1, 'gradient_clipping': 1.0, 'offload_optimizer_device': 'none', 'offload_param_device': 'none', 'zero3_init_flag': True, 'zero3_save_16bit_model': True, 'zero_stage': 3}
+	- downcast_bf16: no
+	- tpu_use_cluster: False
+	- tpu_use_sudo: False
+	- tpu_env: []
+```
