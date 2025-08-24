@@ -1,6 +1,6 @@
-# LLM Transformers Project - Medical Text Generation
+# LLM Transformers Project - 
 
-This project demonstrates how to use Microsoft's Phi-4-mini-instruct model with the Hugging Face Transformers library for medical text generation tasks, specifically using Alzheimer's disease research abstracts.
+This project demonstrates how to use Microsoft's Phi-4-mini-instruct model with the Hugging Face Transformers library. It is based on tutorial: [https://huggingface.co/docs/transformers/en/tasks/text_generation](https://huggingface.co/docs/transformers/en/tasks/text_generation).
 
 ## Setup
 
